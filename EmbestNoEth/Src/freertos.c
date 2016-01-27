@@ -35,33 +35,29 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_os.h"
+
+/* USER CODE BEGIN Includes */  
 #include "gpio.h"
 #include <stdio.h>
-
-/* USER CODE BEGIN Includes */     
-
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
-osThreadId usartPrintfTestHandle;
-osThreadId gpioToggleLedTestHandle;
 osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN Variables */
-
+osThreadId usartPrintfTestHandle;
+osThreadId gpioToggleLedTestHandle;
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
-void UsartPrintfTest(void const * argument);
-void GpioToggleLedTest(void const * argument);
-
 
 extern void MX_FATFS_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
-
+void UsartPrintfTest(void const * argument);
+void GpioToggleLedTest(void const * argument);
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */

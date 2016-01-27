@@ -46,8 +46,8 @@
 #define PH0_OSC_IN_GPIO_Port GPIOH
 #define PH1_OSC_OUT_Pin GPIO_PIN_1
 #define PH1_OSC_OUT_GPIO_Port GPIOH
-#define GPIO_LED_MONITOR_Pin GPIO_PIN_0
-#define GPIO_LED_MONITOR_Port GPIOC
+#define LED_MONITOR_Pin GPIO_PIN_0
+#define LED_MONITOR_GPIO_Port GPIOC
 #define B1_Pin GPIO_PIN_0
 #define B1_GPIO_Port GPIOA
 #define BOOT1_Pin GPIO_PIN_2

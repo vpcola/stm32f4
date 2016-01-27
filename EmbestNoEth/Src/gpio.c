@@ -66,11 +66,11 @@ void MX_GPIO_Init(void)
   __GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = GPIO_LED_MONITOR_Pin;
+  GPIO_InitStruct.Pin = LED_MONITOR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(GPIO_LED_MONITOR_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_MONITOR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -110,17 +110,17 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 2 */
 void PC0_LED_On(void)
 {
-    HAL_GPIO_WritePin(GPIO_LED_MONITOR_Port, GPIO_LED_MONITOR_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LED_MONITOR_GPIO_Port, LED_MONITOR_Pin, GPIO_PIN_SET);
 }
 
 void PC0_LED_Off(void)
 {
-    HAL_GPIO_WritePin(GPIO_LED_MONITOR_Port, GPIO_LED_MONITOR_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LED_MONITOR_GPIO_Port, LED_MONITOR_Pin, GPIO_PIN_RESET);
 }
 
 void PC0_LED_Toggle(void)
 {
-    HAL_GPIO_TogglePin(GPIO_LED_MONITOR_Port, GPIO_LED_MONITOR_Pin);
+    HAL_GPIO_TogglePin(LED_MONITOR_GPIO_Port, LED_MONITOR_Pin);
 }
 /* USER CODE END 2 */
 
