@@ -36,28 +36,37 @@
 #include "task.h"
 #include "cmsis_os.h"
 
-/* USER CODE BEGIN Includes */  
+/* USER CODE BEGIN Includes */     
 #include "gpio.h"
+#include "sd2119.h"
 #include <stdio.h>
+#include "shell.h"
+
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
+osSemaphoreId dcmiBinarySemaphoreHandle;
 
 /* USER CODE BEGIN Variables */
+osThreadId shellThreadHandle;
 osThreadId usartPrintfTestHandle;
 osThreadId gpioToggleLedTestHandle;
+osThreadId lcdTestThreadHandle;
+
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
-
 extern void MX_FATFS_Init(void);
+extern void MX_LWIP_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
 void UsartPrintfTest(void const * argument);
 void GpioToggleLedTest(void const * argument);
+void LcdTestThread(void const * argument);
+
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
@@ -72,6 +81,11 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* definition and creation of dcmiBinarySemaphore */
+  osSemaphoreDef(dcmiBinarySemaphore);
+  dcmiBinarySemaphoreHandle = osSemaphoreCreate(osSemaphore(dcmiBinarySemaphore), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -88,15 +102,23 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-	osThreadDef(usartPrintfTask, UsartPrintfTest, osPriorityNormal, 0, 128);
-  usartPrintfTestHandle = osThreadCreate(osThread(usartPrintfTask), NULL);
+  //osThreadDef(usartPrintfTask, UsartPrintfTest, osPriorityNormal, 0, 128);
+  //usartPrintfTestHandle = osThreadCreate(osThread(usartPrintfTask), NULL);
+  osThreadDef(shellThreadTask, shellStart, osPriorityNormal, 0, 256);
+  shellThreadHandle = osThreadCreate(osThread(shellThreadTask), NULL);
+
 
   osThreadDef(gpioToggleTask, GpioToggleLedTest, osPriorityNormal, 0, 128);
-  gpioToggleLedTestHandle = osThreadCreate(osThread(gpioToggleTask), NULL);	
+  gpioToggleLedTestHandle = osThreadCreate(osThread(gpioToggleTask), NULL);
+
+  osThreadDef(lcdTestTask, LcdTestThread, osPriorityNormal, 0, 256);
+  lcdTestThreadHandle = osThreadCreate(osThread(lcdTestTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+  LCD_Init();
+	LCD_Clear(Black);
   /* USER CODE END RTOS_QUEUES */
 }
 
@@ -116,15 +138,17 @@ void StartDefaultTask(void const * argument)
 }
 
 /* USER CODE BEGIN Application */
-/* USER CODE BEGIN Application */
 void UsartPrintfTest(void const * argument)
 {
     int i = 0;
     while(1)
     {
         printf("value of i = [%d]\r\n", i);
-        osDelay(1000);
-			  i++;
+        osDelay(100);
+			  if (i < 100) 
+					i++;
+				else
+					i = 0;
     }
 
 }
@@ -136,7 +160,25 @@ void GpioToggleLedTest(void const * argument)
         PC0_LED_Toggle();
         osDelay(1000);
     }
-}     
+}
+
+void LcdTestThread(void const * argument)
+{
+    int i = 0;
+    char tmpbuff[100];
+    while(1)
+    {
+       sprintf(tmpbuff, "Init %d", i);
+       LCD_DisplayStringLine(LINE(2), (uint8_t *) tmpbuff);
+       if (i > 99) 
+           i = 0;  
+       else 
+           i++;
+			 
+			 osDelay(1000);
+    }
+}
+     
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

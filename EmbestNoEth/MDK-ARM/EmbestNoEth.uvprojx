@@ -706,6 +706,31 @@
               <FileType>1</FileType>
               <FilePath>../Src/spi.c</FilePath>
             </File>
+            <File>
+              <FileName>rtosheap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\rtosheap.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd2119.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\sd2119.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>utility.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\utility.c</FilePath>
+            </File>
+            <File>
+              <FileName>fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fonts.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
