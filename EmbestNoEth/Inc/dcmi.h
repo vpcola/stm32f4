@@ -54,6 +54,9 @@ extern DCMI_HandleTypeDef hdcmi;
 void MX_DCMI_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+void DCMI_DMASetup(uint32_t MemInc, 
+        uint32_t MemDataAlignment, 
+        uint32_t DMAMode);
 
 /* USER CODE END Prototypes */
 

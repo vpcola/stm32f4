@@ -189,6 +189,38 @@ void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef* hdcmi)
 } 
 
 /* USER CODE BEGIN 1 */
+void DCMI_DMASetup(uint32_t MemInc, uint32_t MemDataAlignment, uint32_t DMAMode)
+{
+    /* Peripheral DMA init*/
+
+    if(hdcmi.Instance==DCMI)
+    {
+        // Disable DMA 
+        HAL_DMA_DeInit(hdcmi.DMA_Handle);
+        HAL_NVIC_DisableIRQ(DCMI_IRQn);
+
+        hdma_dcmi.Instance = DMA2_Stream1;
+        hdma_dcmi.Init.Channel = DMA_CHANNEL_1;
+        hdma_dcmi.Init.Direction = DMA_PERIPH_TO_MEMORY;
+        hdma_dcmi.Init.PeriphInc = DMA_PINC_DISABLE;
+        hdma_dcmi.Init.MemInc = MemInc;
+        hdma_dcmi.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+        hdma_dcmi.Init.MemDataAlignment = MemDataAlignment;
+        hdma_dcmi.Init.Mode = DMAMode;
+        hdma_dcmi.Init.Priority = DMA_PRIORITY_LOW;
+        hdma_dcmi.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+        hdma_dcmi.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+        hdma_dcmi.Init.MemBurst = DMA_MBURST_SINGLE;
+        hdma_dcmi.Init.PeriphBurst = DMA_PBURST_SINGLE;
+        HAL_DMA_Init(&hdma_dcmi);
+
+        __HAL_LINKDMA(&hdcmi,DMA_Handle,hdma_dcmi);
+
+        /* Peripheral interrupt init*/
+        HAL_NVIC_SetPriority(DCMI_IRQn, 5, 0);
+        HAL_NVIC_EnableIRQ(DCMI_IRQn);
+    }
+}
 
 /* USER CODE END 1 */
 
