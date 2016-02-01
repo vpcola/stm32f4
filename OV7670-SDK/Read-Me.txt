@@ -1,0 +1,5 @@
+Thank you for taking interest in OV7670 Camera Module from Sunrom.com Model: 4202
+http://www.sunrom.com/653
+
+This file contains details to get you started with sample source code. 
+Please go through them carefully or google for OV7670 interfacing.
