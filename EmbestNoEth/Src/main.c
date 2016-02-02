@@ -39,6 +39,7 @@
 #include "i2c.h"
 #include "sdio.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 #include "fsmc.h"
@@ -90,6 +91,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SDIO_SD_Init();
   MX_SPI2_Init();
+  MX_TIM1_Init();	
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */

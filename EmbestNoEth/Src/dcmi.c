@@ -138,7 +138,8 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
     HAL_NVIC_SetPriority(DCMI_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(DCMI_IRQn);
   /* USER CODE BEGIN DCMI_MspInit 1 */
-
+		/* Configure the DMA stream */
+		HAL_DMA_Init(hdcmi->DMA_Handle);   
   /* USER CODE END DCMI_MspInit 1 */
   }
 }

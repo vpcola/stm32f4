@@ -54,8 +54,34 @@ void nDelay(uint32_t n)
 }
 
 
-void OV9655_SetupCamera(CapImageSize size)
+int OV9655_SetupCamera(CapImageSize size, ImageDestination dest)
 {
+  /* Reset and check the presence of the OV9655 camera module */
+  if (SingleRandomWrite(OV9655_DEVICE_WRITE_ADDRESS,0x12, 0x80))
+  {
+     return (0xFF);
+  }
+
+  /* OV9655 Camera size setup */
+  if (size == QVGA)	
+		OV9655_QVGASizeSetup();
+	else
+		OV9655_QQVGASizeSetup();
+
+  /* Set the RGB565 mode */
+  SingleRandomWrite(OV9655_DEVICE_WRITE_ADDRESS, OV9655_COM7, 0x63);
+  SingleRandomWrite(OV9655_DEVICE_WRITE_ADDRESS, OV9655_COM15, 0x10);
+
+  /* Invert the HRef signal*/
+  SingleRandomWrite(OV9655_DEVICE_WRITE_ADDRESS, OV9655_COM10, 0x08);
+
+  /* Configure the DCMI to interface with the OV9655 camera module */
+	if (dest == ToMemory)
+		DCMI_DMASetup(DMA_MINC_ENABLE, DMA_MDATAALIGN_HALFWORD, DMA_NORMAL);
+	else // To LCD
+		DCMI_DMASetup(DMA_MINC_DISABLE, DMA_MDATAALIGN_HALFWORD, DMA_CIRCULAR);
+  
+  return (0x00);	
 }
 
 /**
@@ -689,10 +715,10 @@ void OV9655_QQVGASizeSetup(void)
  */
 void OV9655_ReadID(OV9655_IDTypeDef* OV9655ID)
 {
-    OV9655ID->Manufacturer_ID1 = SingleRandomRead(OV9655_DEVICE_WRITE_ADDRESS, OV9655_MIDH);
-    OV9655ID->Manufacturer_ID2 = SingleRandomRead(OV9655_DEVICE_WRITE_ADDRESS, OV9655_MIDL);
-    OV9655ID->Version = SingleRandomRead(OV9655_DEVICE_WRITE_ADDRESS, OV9655_VER);
-    OV9655ID->PID = SingleRandomRead(OV9655_DEVICE_WRITE_ADDRESS, OV9655_PID);
+    OV9655ID->Manufacturer_ID1 = SingleRandomRead(OV9655_DEVICE_READ_ADDRESS, OV9655_MIDH);
+    OV9655ID->Manufacturer_ID2 = SingleRandomRead(OV9655_DEVICE_READ_ADDRESS, OV9655_MIDL);
+    OV9655ID->Version = SingleRandomRead(OV9655_DEVICE_READ_ADDRESS, OV9655_VER);
+    OV9655ID->PID = SingleRandomRead(OV9655_DEVICE_READ_ADDRESS, OV9655_PID);
 }
 
 /**

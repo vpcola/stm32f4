@@ -38,7 +38,10 @@
 
 /* USER CODE BEGIN Includes */     
 #include "gpio.h"
+#include "tim.h"
 #include "sd2119.h"
+#include "dcmi.h"
+#include "ov9655.h"
 #include <stdio.h>
 #include "shell.h"
 
@@ -46,13 +49,16 @@
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
+osMutexId lcdMutexHandle;
 osSemaphoreId dcmiBinarySemaphoreHandle;
+osSemaphoreId buttonBinarySemaphoreHandle;
 
 /* USER CODE BEGIN Variables */
 osThreadId shellThreadHandle;
 osThreadId usartPrintfTestHandle;
 osThreadId gpioToggleLedTestHandle;
 osThreadId lcdTestThreadHandle;
+osThreadId buttonWatcherHandle;
 
 /* USER CODE END Variables */
 
@@ -66,6 +72,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 void UsartPrintfTest(void const * argument);
 void GpioToggleLedTest(void const * argument);
 void LcdTestThread(void const * argument);
+void ButtonWatcherThread(void const * argument);
 
 /* USER CODE END FunctionPrototypes */
 
@@ -77,7 +84,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
        
   /* USER CODE END Init */
-
+  osMutexDef(lcdMutex);
+  lcdMutexHandle = osMutexCreate(osMutex(lcdMutex));
+	
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
@@ -86,6 +95,9 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of dcmiBinarySemaphore */
   osSemaphoreDef(dcmiBinarySemaphore);
   dcmiBinarySemaphoreHandle = osSemaphoreCreate(osSemaphore(dcmiBinarySemaphore), 1);
+	
+	osSemaphoreDef(buttonBinarySemaphore);
+	buttonBinarySemaphoreHandle = osSemaphoreCreate(osSemaphore(buttonBinarySemaphore), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -108,17 +120,24 @@ void MX_FREERTOS_Init(void) {
   shellThreadHandle = osThreadCreate(osThread(shellThreadTask), NULL);
 
 
-  osThreadDef(gpioToggleTask, GpioToggleLedTest, osPriorityNormal, 0, 128);
-  gpioToggleLedTestHandle = osThreadCreate(osThread(gpioToggleTask), NULL);
+  //osThreadDef(gpioToggleTask, GpioToggleLedTest, osPriorityNormal, 0, 128);
+  //gpioToggleLedTestHandle = osThreadCreate(osThread(gpioToggleTask), NULL);
 
   osThreadDef(lcdTestTask, LcdTestThread, osPriorityNormal, 0, 256);
   lcdTestThreadHandle = osThreadCreate(osThread(lcdTestTask), NULL);
+	
+	osThreadDef(buttonWatcherTask, ButtonWatcherThread, osPriorityNormal, 0, 256);
+	buttonWatcherHandle = osThreadCreate(osThread(buttonWatcherTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   LCD_Init();
 	LCD_Clear(Black);
+	
+	PC0_LED_Off();
+	
+	HAL_TIM_Base_Start(&htim1);
   /* USER CODE END RTOS_QUEUES */
 }
 
@@ -166,10 +185,32 @@ void LcdTestThread(void const * argument)
 {
     int i = 0;
     char tmpbuff[100];
+	  OV9655_IDTypeDef camid;
+	
+	  // Get the camera id and display it
+	  OV9655_ReadID(&camid);
+		
+		if ( xSemaphoreTake( lcdMutexHandle, ( TickType_t ) 10 ) == pdTRUE )
+		{
+			sprintf(tmpbuff, "ID1: %X", camid.Manufacturer_ID1);
+			LCD_DisplayStringLine(LINE(1), (uint8_t *) tmpbuff);
+			sprintf(tmpbuff, "ID2: %X", camid.Manufacturer_ID2);
+			LCD_DisplayStringLine(LINE(2), (uint8_t *) tmpbuff);
+			sprintf(tmpbuff, "VER: %X", camid.Version);
+			LCD_DisplayStringLine(LINE(3), (uint8_t *) tmpbuff);
+			xSemaphoreGive( lcdMutexHandle );
+		}
+	
     while(1)
     {
        sprintf(tmpbuff, "Init %d", i);
-       LCD_DisplayStringLine(LINE(2), (uint8_t *) tmpbuff);
+			 // Get hold of a shared LCD resource
+       if( xSemaphoreTake( lcdMutexHandle, ( TickType_t ) 10 ) == pdTRUE )
+       {			
+						LCD_DisplayStringLine(LINE(4), (uint8_t *) tmpbuff);
+				    xSemaphoreGive( lcdMutexHandle );
+			 }
+				
        if (i > 99) 
            i = 0;  
        else 
@@ -178,7 +219,42 @@ void LcdTestThread(void const * argument)
 			 osDelay(1000);
     }
 }
-     
+
+void ButtonWatcherThread(void const * argument)
+{
+	while(1)
+	{
+        // this waits for the semaphore to be released
+        if (xSemaphoreTake( buttonBinarySemaphoreHandle, portMAX_DELAY ) == pdTRUE )
+        {
+						if( xSemaphoreTake( lcdMutexHandle, ( TickType_t ) 1000 ) == pdTRUE )
+						{					
+							PC0_LED_Toggle();
+							// Transfer image to lcd
+							// Setup camera transfer to LCD
+							//OV9655_SetupCamera(QVGA, ToLCD);
+					
+							//LCD_SetDisplayWindow(0, 0, 320, 240);
+							//LCD_WriteRAM_Prepare();
+
+							/* Enable DCMI interface */
+							//HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT, FSMC_LCD_ADDRESS, (320 * 240 * 2) );			
+							
+				      xSemaphoreGive( lcdMutexHandle );							
+						}
+        }		
+	}
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == B1_Pin)
+	{
+     /* Unblock the task by releasing the semaphore. */
+			xSemaphoreGiveFromISR( buttonBinarySemaphoreHandle, NULL );
+  }
+}
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+	
 /* Exported types ------------------------------------------------------------*/
 typedef struct
 {
@@ -20,8 +22,17 @@ typedef enum
     QVGA = 1
 } CapImageSize;
 
+typedef enum
+{
+	ToMemory = 0,
+	ToLCD,
+} ImageDestination;
+
 
 /* Exported constants --------------------------------------------------------*/
+
+#define DCMI_DR_ADDRESS     0x50050028
+#define FSMC_LCD_ADDRESS    0x60100000
 
 /* Use this define to set the maximum delay timeout for the I2C DCMI_SingleRandomWrite()
    and DCMI_SingleRandomRead() operations. Exeeding this timeout delay, the read/write 
@@ -263,7 +274,7 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void OV9655_SetupCamera(CapImageSize size);
+int OV9655_SetupCamera(CapImageSize size, ImageDestination dest);
 void OV9655_Reset(void);
 void OV9655_QQVGASizeSetup(void);
 void OV9655_QVGASizeSetup(void);
