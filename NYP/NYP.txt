@@ -1,0 +1,92 @@
+Configuration	NYP
+STM32CubeMX 	4.12.0
+Date	02/04/2016
+MCU	STM32F405RGTx
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+ADC1	IN3	ADC1_IN3	PA3
+ADC1	IN4	ADC1_IN4	PA4
+ADC1	IN5	ADC1_IN5	PA5
+ADC1	IN6	ADC1_IN6	PA6
+ADC2	IN0	ADC2_IN0	PA0-WKUP
+ADC2	IN1	ADC2_IN1	PA1
+ADC2	IN2	ADC2_IN2	PA2
+ADC2	IN7	ADC2_IN7	PA7
+I2C2	I2C	I2C2_SCL	PB10
+I2C2	I2C	I2C2_SDA	PB11
+SYS	Serial Wire Debug (SWD)	SYS_JTCK-SWCLK	PA14
+SYS	Serial Wire Debug (SWD)	SYS_JTMS-SWDIO	PA13
+TIM3	Internal Clock	TIM3_VS_ClockSourceINT	VP_TIM3_VS_ClockSourceINT
+TIM3	Input Capture direct mode	TIM3_CH1	PB4
+TIM3	Input Capture direct mode	TIM3_CH2	PB5
+TIM4	Internal Clock	TIM4_VS_ClockSourceINT	VP_TIM4_VS_ClockSourceINT
+TIM4	Input Capture direct mode	TIM4_CH1	PB6
+TIM4	Input Capture direct mode	TIM4_CH2	PB7
+TIM8	Internal Clock	TIM8_VS_ClockSourceINT	VP_TIM8_VS_ClockSourceINT
+TIM8	Output Compare CH1	TIM8_CH1	PC6
+TIM8	Output Compare CH2	TIM8_CH2	PC7
+TIM8	Output Compare CH3	TIM8_CH3	PC8
+TIM8	Output Compare CH4	TIM8_CH4	PC9
+USART1	Asynchronous	USART1_RX	PA10
+USART1	Asynchronous	USART1_TX	PA9
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+14	PA0-WKUP	ADC2_IN0	
+15	PA1	ADC2_IN1	
+16	PA2	ADC2_IN2	
+17	PA3	ADC1_IN3	
+20	PA4	ADC1_IN4	
+21	PA5	ADC1_IN5	
+22	PA6	ADC1_IN6	
+23	PA7	ADC2_IN7	
+29	PB10	I2C2_SCL	
+30	PB11	I2C2_SDA	
+33	PB12	GPIO_EXTI12	BTN_SW2
+34	PB13	GPIO_EXTI13	BTN_SW1
+35	PB14	GPIO_Output	MOTOR_SWITCH
+36	PB15	GPIO_Output	
+37	PC6	TIM8_CH1	
+38	PC7	TIM8_CH2	
+39	PC8	TIM8_CH3	
+40	PC9	TIM8_CH4	
+41	PA8	GPIO_Output	BUZZER
+42	PA9	USART1_TX	
+43	PA10	USART1_RX	
+46	PA13	SYS_JTMS-SWDIO	
+49	PA14	SYS_JTCK-SWCLK	
+56	PB4	TIM3_CH1	
+57	PB5	TIM3_CH2	
+58	PB6	TIM4_CH1	
+59	PB7	TIM4_CH2	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : NYP
+Project Folder : C:\Users\Vergil\Documents\Projects\NYP
+Toolchain / IDE : SW4STM32
+Firmware Package Name and Version : STM32Cube FW_F4 V1.10.1
+
+
+Code Generation Settings : 
+STM32Cube Firmware Library Package : Copy all used libraries into the project folder
+Generate peripheral initialization as a pair of '.c/.h' files per IP : Yes
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : Balanced Size/Speed
+
+
+
+
+
+

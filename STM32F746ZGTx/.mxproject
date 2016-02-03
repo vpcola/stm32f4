@@ -1,6 +1,6 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/Vergil/Documents/Projects/STM32F746ZGTx/Inc
-SourcePath=C:/Users/Vergil/Documents/Projects/STM32F746ZGTx/Src
+HeaderPath=C:/Users/Vergil/Documents/GitHub/stm32f4/STM32F746ZGTx/Inc
+SourcePath=C:/Users/Vergil/Documents/GitHub/stm32f4/STM32F746ZGTx/Src
 SourceFiles=ffconf.h;user_diskio.h;fatfs.h;FreeRTOSConfig.h;lwip.h;lwipopts.h;ethernetif.h;stm32f7xx_it.h;stm32f7xx_hal_conf.h;mxconstants.h;user_diskio.c;fatfs.c;freertos.c;lwip.c;ethernetif.c;stm32f7xx_it.c;stm32f7xx_hal_msp.c;main.c;gpio.h;dcmi.h;i2c.h;spi.h;usart.h;gpio.c;dcmi.c;i2c.c;spi.c;usart.c;dma.h;dma.c;tim.h;tim.c;
 HeaderFiles=ffconf.h;user_diskio.h;fatfs.h;FreeRTOSConfig.h;lwip.h;lwipopts.h;ethernetif.h;stm32f7xx_it.h;stm32f7xx_hal_conf.h;mxconstants.h;gpio.h;dcmi.h;i2c.h;spi.h;usart.h;dma.h;tim.h;
 

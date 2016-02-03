@@ -38,7 +38,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-
+#define USART_DEFAULT_TIMEOUT 1000
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -115,7 +115,23 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 } 
 
 /* USER CODE BEGIN 1 */
+int Get_Char(void)
+{
+    int tmpdat = 0;
+    if(HAL_UART_Receive(&huart3, (uint8_t *) &tmpdat, 1, USART_DEFAULT_TIMEOUT) == HAL_OK)
+        return (int) tmpdat;
+    else
+        return -1;
+}
 
+int Send_Char(char ch)
+{
+    char tmpdat = (char) ch;
+    if (HAL_UART_Transmit(&huart3, (uint8_t *) &tmpdat, 1,  USART_DEFAULT_TIMEOUT) == HAL_OK)
+        return 0;
+    else
+        return -1;
+}
 /* USER CODE END 1 */
 
 /**

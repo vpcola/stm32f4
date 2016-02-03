@@ -38,13 +38,16 @@
 
 /* USER CODE BEGIN Includes */     
 #include "gpio.h"
+#include "shell.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN Variables */
+osSemaphoreId dcmiBinarySemaphoreHandle;
 osThreadId toggleTaskHandle;
+osThreadId shellThreadHandle;
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
@@ -87,6 +90,8 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
+  osSemaphoreDef(dcmiBinarySemaphore);
+  dcmiBinarySemaphoreHandle = osSemaphoreCreate(osSemaphore(dcmiBinarySemaphore), 1);	
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -102,6 +107,9 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   osThreadDef(ledTask, ToggleLedTask, osPriorityNormal, 0, 128);
   toggleTaskHandle = osThreadCreate(osThread(ledTask), NULL);	
+	
+	osThreadDef(shellThreadTask, shellStart, osPriorityNormal, 0, 256);
+  shellThreadHandle = osThreadCreate(osThread(shellThreadTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */

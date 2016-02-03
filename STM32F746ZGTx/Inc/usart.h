@@ -54,6 +54,8 @@ extern UART_HandleTypeDef huart3;
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+int Get_Char(void);
+int Send_Char(char ch);
 
 /* USER CODE END Prototypes */
 
