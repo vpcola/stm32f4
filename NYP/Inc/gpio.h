@@ -47,13 +47,18 @@
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-
+typedef enum
+{
+	LED_OFF = 0,
+	LED_ON = 1,
+} LEDVAL;
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void Led1P_Set(LEDVAL val);
+void Led1P_Toggle(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

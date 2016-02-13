@@ -45,20 +45,23 @@
 
 /* USER CODE END Includes */
 
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim8;
 
 /* USER CODE BEGIN Private defines */
-
+#define TIM3_PERIOD	8399 // Period to generate 10KHz of PWM
 /* USER CODE END Private defines */
 
+void MX_TIM2_Init(void);
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
-void MX_TIM8_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void TIM3_StartPWM(uint32_t channel);
+void TIM3_StopPWM(uint32_t channel);
+void TIM3_SetPWM(uint32_t channel,  uint32_t Pulse);
+void TIM3_SetDuty(uint32_t channel, float dutycycle);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

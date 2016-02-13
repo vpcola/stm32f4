@@ -113,7 +113,29 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 } 
 
 /* USER CODE BEGIN 1 */
+int Get_Char(void)
+{
+    int tmpdat = 0;
+    if(HAL_UART_Receive(&huart1, (uint8_t *) &tmpdat, 1, USART_DEFAULT_TIMEOUT) == HAL_OK)
+        return (int) tmpdat;
+    else
+        return -1;
+}
 
+int Send_Char(char ch)
+{
+    char tmpdat = (char) ch;
+    if (HAL_UART_Transmit(&huart1, (uint8_t *) &tmpdat, 1,  USART_DEFAULT_TIMEOUT) == HAL_OK)
+        return 0;
+    else
+        return -1;
+}
+
+int Usart_HasData()
+{
+	// returns 1 if there is a character pending to be received.
+	return __HAL_UART_GET_FLAG(&huart1, UART_FLAG_RXNE);
+}
 /* USER CODE END 1 */
 
 /**

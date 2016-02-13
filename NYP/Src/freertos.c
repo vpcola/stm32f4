@@ -37,14 +37,16 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */     
-
+#include "shell.h"
+#include "gpio.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN Variables */
-
+osThreadId shellTaskHandle;
+osThreadId ledTaskHandle;
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
@@ -53,7 +55,7 @@ void StartDefaultTask(void const * argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
-
+void ToggleLedTask(void const * argument);
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
@@ -84,6 +86,11 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadDef(shellTask, shellStart, osPriorityNormal, 0, 512);
+  shellTaskHandle = osThreadCreate(osThread(shellTask), NULL);	
+	
+	osThreadDef(ledTask, ToggleLedTask, osPriorityNormal, 0, 128);
+	ledTaskHandle = osThreadCreate(osThread(ledTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -105,7 +112,14 @@ void StartDefaultTask(void const * argument)
 }
 
 /* USER CODE BEGIN Application */
-     
+void ToggleLedTask(void const * argument)
+{
+	while(1)
+	{
+		Led1P_Toggle();
+		osDelay(1000);
+	}
+}	
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

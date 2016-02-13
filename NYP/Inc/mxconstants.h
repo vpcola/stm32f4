@@ -38,14 +38,38 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define BTN_SW2_Pin GPIO_PIN_12
-#define BTN_SW2_GPIO_Port GPIOB
-#define BTN_SW1_Pin GPIO_PIN_13
-#define BTN_SW1_GPIO_Port GPIOB
-#define MOTOR_SWITCH_Pin GPIO_PIN_14
-#define MOTOR_SWITCH_GPIO_Port GPIOB
-#define BUZZER_Pin GPIO_PIN_8
-#define BUZZER_GPIO_Port GPIOA
+#define PIN7_E_Pin GPIO_PIN_14
+#define PIN7_E_GPIO_Port GPIOC
+#define PIN8_E_Pin GPIO_PIN_15
+#define PIN8_E_GPIO_Port GPIOC
+#define ADC1_XIN_Pin GPIO_PIN_0
+#define ADC1_XIN_GPIO_Port GPIOA
+#define ADC1_YIN_Pin GPIO_PIN_2
+#define ADC1_YIN_GPIO_Port GPIOA
+#define PO1_Pin GPIO_PIN_12
+#define PO1_GPIO_Port GPIOB
+#define PO2_Pin GPIO_PIN_13
+#define PO2_GPIO_Port GPIOB
+#define PO3_Pin GPIO_PIN_14
+#define PO3_GPIO_Port GPIOB
+#define PO5_Pin GPIO_PIN_15
+#define PO5_GPIO_Port GPIOB
+#define PO6_Pin GPIO_PIN_6
+#define PO6_GPIO_Port GPIOC
+#define PO7_Pin GPIO_PIN_7
+#define PO7_GPIO_Port GPIOC
+#define PIN1_E_Pin GPIO_PIN_8
+#define PIN1_E_GPIO_Port GPIOC
+#define PIN2_E_Pin GPIO_PIN_9
+#define PIN2_E_GPIO_Port GPIOC
+#define BUZZ_Pin GPIO_PIN_11
+#define BUZZ_GPIO_Port GPIOA
+#define PIN3_E_Pin GPIO_PIN_10
+#define PIN3_E_GPIO_Port GPIOC
+#define PIN4_E_Pin GPIO_PIN_11
+#define PIN4_E_GPIO_Port GPIOC
+#define LED1P_Pin GPIO_PIN_2
+#define LED1P_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -46,17 +46,19 @@
 /* USER CODE END Includes */
 
 extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
 void MX_ADC1_Init(void);
-void MX_ADC2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+int readADC1Channel(int channel);	 
+int readJoystickX(void);
+int readJoystickY(void);
+/* Shell extension to read joystick values */
+void cmd_joystick(int argc, char *argv[]);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

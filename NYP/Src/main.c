@@ -34,7 +34,6 @@
 #include "stm32f4xx_hal.h"
 #include "cmsis_os.h"
 #include "adc.h"
-#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -81,17 +80,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_ADC1_Init();
-  MX_ADC2_Init();
   MX_I2C2_Init();
+  MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  MX_TIM8_Init();
   MX_USART1_UART_Init();
 
   /* USER CODE BEGIN 2 */
-
+	/* stop all motors */
+	TIM3_StartPWM(TIM_CHANNEL_1); // Left Motor
+	TIM3_StartPWM(TIM_CHANNEL_2);
+	TIM3_StartPWM(TIM_CHANNEL_3); // Right Motor
+	TIM3_StartPWM(TIM_CHANNEL_4);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -143,7 +144,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);

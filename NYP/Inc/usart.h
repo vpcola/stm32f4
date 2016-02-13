@@ -48,13 +48,15 @@
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN Private defines */
-
+#define USART_DEFAULT_TIMEOUT 1000
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+int Get_Char(void);
+int Send_Char(char);
+int Usart_HasData(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
