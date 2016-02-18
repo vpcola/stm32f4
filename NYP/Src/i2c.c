@@ -113,6 +113,70 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 } 
 
 /* USER CODE BEGIN 1 */
+// These functions are just wrappers to HAL Driver functions
+HAL_StatusTypeDef I2C2_Read(uint16_t address, uint16_t regaddr, uint8_t * data, uint16_t len)
+{
+    return HAL_I2C_Mem_Read(&hi2c2, (address << 1), regaddr, sizeof(regaddr), data, len, I2C_DEFAULT_TIMEOUT);
+}
+
+HAL_StatusTypeDef I2C2_Write(uint16_t address, uint16_t regaddr, uint8_t * data, uint16_t len)
+{
+    return HAL_I2C_Mem_Write(&hi2c2, (address << 1), regaddr, sizeof(regaddr), data, len, I2C_DEFAULT_TIMEOUT);
+}
+
+void I2C2_InitLeds(void)
+{
+	uint8_t temp[2];
+  temp[0]	= I2C_LEDS_DIR_REG; 
+	temp[1] = 0x00; // All output
+	// Leds are connected to Port A of 0x21.
+	HAL_I2C_Master_Transmit(&hi2c2, (I2C_LEDS_ADDR << 1), (uint8_t *) &temp, 2, I2C_DEFAULT_TIMEOUT);
+
+}
+void I2C2_InitLineSensor(void)
+{
+	uint8_t temp[2];
+	temp[0] = I2C_LINESENSOR_DIR_REG;
+	temp[1] = 0xFF; // All inputs
+	
+	HAL_I2C_Master_Transmit(&hi2c2, (I2C_LEDS_ADDR << 1), (uint8_t *) &temp, 2, I2C_DEFAULT_TIMEOUT);
+}
+
+void I2C2_WriteLed(uint8_t val)
+{
+	uint8_t temp[2];
+    temp[0]	= I2C_LEDS_DATA_REG;
+	temp[1] = val; 
+	// Leds are connected to Port A of 0x21.
+	HAL_I2C_Master_Transmit(&hi2c2, (I2C_LEDS_ADDR << 1), (uint8_t *) &temp, 2, I2C_DEFAULT_TIMEOUT);
+}
+
+int I2C2_ReadLineSensor(uint8_t * data)
+{
+	/* Send address */
+	uint8_t regaddr = I2C_LINESENSOR_DATA_REG;
+	if (HAL_I2C_Master_Transmit(&hi2c2, (I2C_LEDS_ADDR << 1) , &regaddr, 1, I2C_DEFAULT_TIMEOUT) != HAL_OK) 
+	{
+		return -1;
+	}
+	
+	if (HAL_I2C_Master_Receive(&hi2c2, (I2C_LEDS_ADDR << 1), data, 1, I2C_DEFAULT_TIMEOUT) != HAL_OK) 
+	{
+		return -1;
+	}
+	
+	return 0;
+		
+}
+
+void cmd_readlinesensor(int argc, char *argv[])
+{
+  (void)argv;	
+	uint8_t data;
+	printf("Reading line sensor ...\r\n");
+	I2C2_ReadLineSensor(&data);
+	printf("Data = %0X\r\n", data);
+}
 
 /* USER CODE END 1 */
 

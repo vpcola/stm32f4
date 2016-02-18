@@ -39,6 +39,9 @@
 /* USER CODE BEGIN Includes */     
 #include "shell.h"
 #include "gpio.h"
+#include "i2c.h"
+#include "tim.h"
+#include "drive.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -89,8 +92,11 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(shellTask, shellStart, osPriorityNormal, 0, 512);
   shellTaskHandle = osThreadCreate(osThread(shellTask), NULL);	
 	
-	osThreadDef(ledTask, ToggleLedTask, osPriorityNormal, 0, 128);
-	ledTaskHandle = osThreadCreate(osThread(ledTask), NULL);
+  osThreadDef(ledTask, ToggleLedTask, osPriorityNormal, 0, 128);
+  ledTaskHandle = osThreadCreate(osThread(ledTask), NULL);
+
+  //startDriveUpdaterTask();
+	//TIM7_Start();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -103,23 +109,28 @@ void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+    uint8_t val = 0;
+    I2C2_InitLeds();
+    /* Infinite loop */
+    for(;;)
+    {
+        I2C2_WriteLed(val);
+        osDelay(500);
+        val++;
+    }
   /* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Application */
 void ToggleLedTask(void const * argument)
 {
-	while(1)
-	{
-		Led1P_Toggle();
-		osDelay(1000);
-	}
+    while(1)
+    {
+
+        osDelay(100);
+    }
 }	
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

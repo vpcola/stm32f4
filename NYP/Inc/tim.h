@@ -48,6 +48,7 @@
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN Private defines */
 #define TIM3_PERIOD	8399 // Period to generate 10KHz of PWM
@@ -56,12 +57,24 @@ extern TIM_HandleTypeDef htim4;
 void MX_TIM2_Init(void);
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
+void MX_TIM7_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void TIM3_StartPWM(uint32_t channel);
 void TIM3_StopPWM(uint32_t channel);
 void TIM3_SetPWM(uint32_t channel,  uint32_t Pulse);
 void TIM3_SetDuty(uint32_t channel, float dutycycle);
+void TIM2_ResetCount(void);
+void TIM4_ResetCount(void);
+void TIM2_StartCount(void);
+void TIM4_StartCount(void);
+int16_t TIM2_GetCount(void);
+int16_t TIM4_GetCount(void);
+void TIM2_ResetCount(void);
+void TIM4_ResetCount(void);
+void TIM2_StartCount(void);
+void TIM4_StartCount(void);// enable and start timer
+void TIM7_Start(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

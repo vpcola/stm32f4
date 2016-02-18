@@ -14,7 +14,7 @@ typedef struct
 
 MotorDuty * getMotorDuty(int x, int y);
 void cmd_runguided(int argc, char *argv[]); 
-
+void cmd_runauto(int argc, char * argv[]);
 	
 #ifdef __cplusplus
 }

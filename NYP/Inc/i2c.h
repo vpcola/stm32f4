@@ -48,13 +48,26 @@
 extern I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN Private defines */
-
+#define I2C_DEFAULT_TIMEOUT 1000
+	 
+#define I2C_LEDS_ADDR	0x21
+#define I2C_LEDS_DIR_REG 0x00
+#define I2C_LEDS_DATA_REG 0x14	
+#define I2C_LINESENSOR_DIR_REG 0x01
+#define I2C_LINESENSOR_DATA_REG 0x13	 
 /* USER CODE END Private defines */
 
 void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+HAL_StatusTypeDef I2C2_Read(uint16_t address, uint16_t regaddr, uint8_t * data, uint16_t len);
+HAL_StatusTypeDef I2C2_Write(uint16_t address, uint16_t regaddr, uint8_t * data, uint16_t len);	 
+void I2C2_InitLeds(void);
+void I2C2_InitLineSensor(void);
+void I2C2_WriteLed(uint8_t val);
+int I2C2_ReadLineSensor(uint8_t * data);
+/* for use in the shell */
+void cmd_readlinesensor(int argc, char *argv[]);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -4,6 +4,7 @@
 #include "adc.h"
 #include "shell.h"
 #include "usart.h"
+#include "i2c.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -87,4 +88,30 @@ void cmd_runguided(int argc, char *argv[])
 		shellClearScreen();
 }
 
+void cmd_runauto(int argc, char * argv[])
+{
+    (void)argv;
+    int x, y;
+    printf("Running in auto mode!\r\n");
+    printf("Press any key to exit ...\r\n");
+
+    while(!Usart_HasData())
+    {
+       // Read current joystick values 
+       x = readJoystickX();
+       y = readJoystickY();
+			 	
+	     printf("X = %d, Y = %d   \r\n", x, y);
+       getMotorDuty(x, y); // Gets the duty cycle of the motors
+                        // from the current x and y values of the joystick
+			 printf("Duty left = %03d, Duty right = %03d   \r\n", motorDuty.lduty, motorDuty.rduty);
+       // Send the Duty cycle values to the motor
+       MotorLeftDuty((float) motorDuty.lduty);
+       MotorRightDuty((float) motorDuty.rduty);
+			 shellGoBackLine(4); 
+       osDelay(100); // Delay for 100 MS 
+    }
+		
+		shellClearScreen();	
+}
 

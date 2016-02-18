@@ -8,6 +8,7 @@
 #include "motor.h"
 #include "adc.h"
 #include "guided.h"
+#include "i2c.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -65,8 +66,10 @@ static ShellCommand local_commands[] = {
   {"info", cmd_info},
   {"tasks", cmd_tasks},
   {"motor", cmd_motor},
+	{"encoder", cmd_encoder},		
   {"joystick", cmd_joystick},
   {"runguided", cmd_runguided},
+	{"line", cmd_readlinesensor},
   { NULL, NULL }
 };
 

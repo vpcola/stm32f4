@@ -85,6 +85,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_TIM7_Init();
   MX_USART1_UART_Init();
 
   /* USER CODE BEGIN 2 */
@@ -93,6 +94,8 @@ int main(void)
 	TIM3_StartPWM(TIM_CHANNEL_2);
 	TIM3_StartPWM(TIM_CHANNEL_3); // Right Motor
 	TIM3_StartPWM(TIM_CHANNEL_4);
+	TIM2_StartCount();
+	TIM4_StartCount();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

@@ -6,5 +6,6 @@ void MotorRightDuty(float duty);
 
 // Shell interface function
 void cmd_motor(int argc, char *argv[]);
+void cmd_encoder(int argc, char *argv[]);
 
 #endif // __MOTOR_H__

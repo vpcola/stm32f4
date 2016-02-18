@@ -1,6 +1,7 @@
 #include "motor.h"
 #include "tim.h"
 #include "shell.h"
+#include "cmsis_os.h" 
 
 #include <stdlib.h>
 #include <string.h>
@@ -135,5 +136,46 @@ void cmd_motor(int argc, char *argv[])
 	
 }
 
-
+void cmd_encoder(int argc, char *argv[])
+{
+	(void)argv;
+	int countleft = 0;
+	int countright = 0;
+	int finalleft;
+	//int finalright;
+	int rpmleft;
+	//int rpmright;
+	int speed;
+	
+	if ((argc == 1) && (strcmp(argv[0], "clear") == 0))
+	{
+		TIM2_ResetCount();
+		TIM4_ResetCount();
+		return;
+	}
+	
+	countleft = TIM2_GetCount();
+	countright = TIM4_GetCount();
+	
+	printf("Left Encoder : %d\r\n", countleft);
+	printf("Right Encoder : %d\r\n", countright);
+	// Display number of wheel turns
+	// Gear ratio is 47:1, 48 CPR encoder yeilding 2248.86 counts/revolution
+	printf("Number of turns (left) : %d\r\n", (int) (countleft/2248.86) );
+	printf("Number of turns (right) : %d\r\n", (int) (countright/2248.86) );
+	
+	printf("Calculating speed ....\r\n");
+	countleft = TIM2_GetCount();
+	countright = TIM4_GetCount();
+	osDelay(1000); // Delay for 1 second
+	finalleft = TIM2_GetCount();
+	//finalright = TIM4_GetCount();
+	// Current RPM = (finalleft - countleft) * 60 (revs/min)
+	rpmleft = ((finalleft - countleft) / 2248.86) * 60;
+	printf("RPM for left motor = %d\r\n", rpmleft);
+	//rpmright = ((finalright - countright) / 2248.86) * 60;
+	// Speed = (RPM (diameter * PI) / 60)
+	speed = rpmleft * (2.5 * 3.1415) / 60;
+	printf("Vehicle speed = %d inches/second\r\n", speed);
+}
 
